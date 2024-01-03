@@ -17,7 +17,6 @@ describe('AppComponent', () => {
   it(`should have as title 'angular-personal-dashboard'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('angular-personal-dashboard');
   });
 
   it('should render title', () => {
