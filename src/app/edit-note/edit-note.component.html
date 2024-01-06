@@ -8,7 +8,7 @@
             <input class="textbox" [ngModel]="note.title" #titleField="ngModel" name="title" type="text" placeholder="Enter note title..." required minlength="3">
             <ng-container *ngIf=titleField?.invalid>
             <p *ngIf="titleField?.errors?.['required']">A note title is required.</p>
-            <p *ngIf="titleField?.errors?.['minlength']">Title must be at least 3 characters.</p>
+            <p *ngIf="titleField?.errors?.['minlength']">Title should be at least 3 characters.</p>
         </ng-container>
         </div>
 
