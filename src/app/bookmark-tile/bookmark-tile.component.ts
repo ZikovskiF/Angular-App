@@ -20,4 +20,8 @@ export class BookmarkTileComponent implements OnInit {
     this.tileIconSrc = this.bookmark.url.origin + '/favicon.ico'
   }
 
+  openBookmarkURL() {
+    window.open(this.bookmark.url, '_blank');
+  }
+
 }

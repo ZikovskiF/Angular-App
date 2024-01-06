@@ -1,4 +1,4 @@
-<div class="bookmark-tile">
+<div class="bookmark-tile" (click)="openBookmarkURL()">
     <div class="tile-icon" *ngIf="!faviconError">
         <img [src]="tileIconSrc" alt="" (error)="faviconError=true">
     </div>
