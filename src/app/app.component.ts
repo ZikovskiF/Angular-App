@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { trigger, transition, style, animate, query, group } from '@angular/animations';
+import { Observable, map, timer } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -110,11 +111,23 @@ import { trigger, transition, style, animate, query, group } from '@angular/anim
     ])
   ]
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
   backgrounds: string [] = [
     'https://images.unsplash.com/photo-1702957954496-8bba5d73a390?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=1080&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTcwNDIxMzExOA&ixlib=rb-4.0.3&q=80&w=1920'
   ]
+  loadingBGImage!: boolean
+
+  dateTime!: Observable<Date>
+
+  ngOnInit(): void {
+
+    this.dateTime = timer(0, 1000).pipe(
+      map(() => {
+        return new Date()
+      })
+    )
+  }
 
   prepareRoute(outlet: RouterOutlet) {
     if (outlet.isActivated) {
@@ -128,8 +141,6 @@ export class AppComponent {
   //   })
 
   //   this.bg = result.url
-
-  loadingBGImage!: boolean
 
    async changeBGImage(): Promise<any> {
     this.loadingBGImage = true
