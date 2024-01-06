@@ -1,18 +1,24 @@
 import { Injectable } from '@angular/core';
 import { Bookmark } from './bookmark.model';
+import { Subscription, fromEvent } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BookmarkService {
 
-  bookmarks: Bookmark[] = [
-    new Bookmark('Wikipedia', 'http://wikipedia.org'),
-    new Bookmark('Youtube', 'http://youtube.com'),
-    new Bookmark('Google', 'http://google.com')
-  ]
+  bookmarks: Bookmark[] = [ ]
 
-  constructor() { }
+  storageListenSub: Subscription
+
+  constructor() {
+    this.loadState()
+
+    this.storageListenSub = fromEvent<StorageEvent>(window, 'storage')
+      .subscribe((event: StorageEvent) => {
+        if (event.key === 'bookmarks') this.loadState()
+      });
+   }
 
   getBookmarks() {
     return this.bookmarks
@@ -24,6 +30,8 @@ export class BookmarkService {
 
   addBookmark(bookmark: Bookmark) {
     this.bookmarks.push(bookmark)
+
+    this.saveState()
   }
 
   // updateBookmark(id: string, updatedFields: Partial<Bookmark>) {
@@ -39,11 +47,34 @@ export class BookmarkService {
     } else {
       console.error('Bookmark with ID ${id} not found')
     }
+
+    this.saveState()
   }
 
   deleteBookmark(id: string) {
     const bookmarkIndex = this.bookmarks.findIndex( b => b.id === id)
     if (bookmarkIndex == -1) return
     this.bookmarks.splice(bookmarkIndex, 1)
+
+    this.saveState()
+  }
+
+  saveState() {
+    localStorage.setItem('bookmarks', JSON.stringify(this.bookmarks))
+  }
+
+  loadState() {
+    try{
+    const bookmarksInStorage = JSON.parse(localStorage.getItem('bookmarks') as any, (key, value) => {
+      if (key == 'url') return new URL(value)
+      return value
+    })
+
+    this.bookmarks.length = 0 //same as notes, todos
+    this.bookmarks.push(...bookmarksInStorage)
+    } catch(e){
+      console.log('There was an error retrieving the bookmarks from localStorage')
+      console.log(e)
+    }
   }
 }

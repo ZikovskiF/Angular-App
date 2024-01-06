@@ -1,9 +1,9 @@
 <div class="todos-wrapper">
     <div class="container">
 
-        <app-todo-item 
+        <app-todo-item
         @todoItemAnim
-        *ngFor="let todo of todos" 
+        *ngFor="let todo of todos; trackBy: trackById"
         [todo]="todo" 
         (click)="toggleCompleted(todo)"
         (editClick)="onEditClick(todo)"
